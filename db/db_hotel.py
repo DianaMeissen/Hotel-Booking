@@ -8,13 +8,18 @@ def create_hotel(db: Session, request: HotelBase):
         location = request.location,
         contact_info = request.contact_info,
         amenities = request.amenities or None,
-        manager_id = request.user_id
+        manager_id = request.manager_id
     )
     db.add(new_hotel)
     db.commit()
     db.refresh(new_hotel)
 
     return new_hotel
+
+def get_hotel(db: Session, id: int):
+    hotel = db.query(DbHotel).filter(DbHotel.id == id).first()
+    # Handle errors
+    return hotel
 
 def get_all_hotels(db: Session):
     return db.query(DbHotel).all()

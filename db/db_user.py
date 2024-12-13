@@ -17,3 +17,25 @@ def create_user(db: Session, request: UserBase):
 
 def get_all_users(db: Session):
     return db.query(DbUser).all()
+
+def get_user(db: Session, id: int):
+    return db.query(DbUser).filter(DbUser.id == id).first()
+
+def update_user(db: Session, id: int, request: UserBase):
+    user = db.query(DbUser).filter(DbUser.id == id)
+    user.update({
+        DbUser.username: request.username,
+        DbUser.email: request.email,
+        DbUser.password: Hash.bcrypt(request.password) # this must be mooved to 'forget password' functionality
+    })
+    db.commit()
+
+    return "User was updated"
+
+def delete_user(db: Session, id: int):
+    user = db.query(DbUser).filter(DbUser.id == id).first()
+    # Handle any exceptions
+    db.delete(user)
+    db.commit()
+
+    return "User was deleted succesfully"
