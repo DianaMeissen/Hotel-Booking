@@ -8,6 +8,12 @@ class User(BaseModel):
    class Config():
       orm_mod = True
 
+class Hotel(BaseModel):
+   id: int
+   name: str
+   class Config():
+      orm_mod = True
+
 
 class Comment(BaseModel):
    user: User
@@ -22,10 +28,12 @@ class UserBase(BaseModel):
    email: str
    password: str
    comments: Optional[List[Comment]] = []
+   hotels: Optional[List[Hotel]] = []
 
 class UserDisplay(BaseModel):
    username: str
    email: str
+   hotels: Optional[List[Hotel]] = []
    class Config():
       orm_mod = True
 
