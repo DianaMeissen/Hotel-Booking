@@ -1,4 +1,5 @@
 /__pycache__
+/auth/__pycache__
 /db/__pycache__
 /router/__pycache__
 .venv

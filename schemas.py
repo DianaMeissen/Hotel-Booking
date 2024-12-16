@@ -1,5 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
+from datetime import datetime
 
 # User inside Comment 
 class User(BaseModel):
@@ -69,12 +70,12 @@ class RoomBase(BaseModel):
 class BookingBase(BaseModel):
     user_id: int
     room_id: int
-   #  start_date: date
-   #  end_date: date
+   #  start_date: datetime.utcnow()
+   #  end_date: datetime
     payment_id: int
 
 class PaymentBase(BaseModel):
     booking_id: int
     transaction_amount: float
-   #  date: date
+   #  date: datetime
     status: bool

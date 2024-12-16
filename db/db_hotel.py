@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 from sqlalchemy.orm.session import Session
 from db.models import DbHotel
 from schemas import HotelBase
@@ -18,7 +19,9 @@ def create_hotel(db: Session, request: HotelBase):
 
 def get_hotel(db: Session, id: int):
     hotel = db.query(DbHotel).filter(DbHotel.id == id).first()
-    # Handle errors
+    if not hotel:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+            detail=f"Hotel with id {id} not found")
     return hotel
 
 def get_all_hotels(db: Session):
