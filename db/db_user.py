@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from db.hash import Hash
 from sqlalchemy.orm.session import Session
 from db.models import DbUser
-from schemas import UserBase
+from schemas import UserBase, UserPatch
 
 def create_user(db: Session, request: UserBase):
     new_user = DbUser(
@@ -47,7 +47,10 @@ def update_user(db: Session, id: int, request: UserBase):
     })
     db.commit()
 
-    return "User was updated"
+    return {
+        "message": "User was updated",
+        "user": user
+    }
 
 def delete_user(db: Session, id: int):
     user = db.query(DbUser).filter(DbUser.id == id).first()
@@ -58,3 +61,27 @@ def delete_user(db: Session, id: int):
     db.commit()
 
     return "User was deleted succesfully"
+
+def patch_user(db: Session, id: int, request: UserPatch):
+    user = db.query(DbUser).filter(DbUser.id == id)
+    if not user.first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+            detail=f"User with id {id} not found")
+    if request.username is not None:
+        user.update({
+            DbUser.username: request.username,
+        })
+    if request.email is not None:
+        user.update({
+            DbUser.email: request.email,
+        })
+    if request.password is not None:
+        user.update({
+            DbUser.password: Hash.bcrypt(request.password)
+        })
+    db.commit()
+
+    return {
+        "message": "User was updated",
+        "user": user
+    }
