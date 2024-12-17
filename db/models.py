@@ -27,7 +27,7 @@ class DbHotel(Base):
 class DbRoom(Base):
     __tablename__ = "rooms"
     id = Column(Integer, primary_key = True, index = True)
-    hotel_id = Column(Integer)
+    hotel_id = Column(Integer) # relationship("DbHotel", back_populates='rooms') this logic must be added to the hotel obj
     room_number = Column(String)
     price = Column(Float)
     type = Column(String)
@@ -36,16 +36,16 @@ class DbRoom(Base):
 class DbBooking(Base):
     __tablename__ = "bookings"
     id = Column(Integer, primary_key = True, index = True)
-    user_id = Column(Integer)
-    room_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey("users.id")) # ask maybe it is better to use relationships()
+    room_id = Column(Integer, ForeignKey("rooms.id"))
     start_date = Column(Date)
     end_date = Column(Date)
-    payment_id = Column(Integer)
+    payment_id = relationship("DbPayment", back_populates='payments')
 
 class DbPayment(Base):
     __tablename__ = "payments"
     id = Column(Integer, primary_key = True, index = True)
-    booking_id = Column(Integer)
+    booking_id = Column(Integer, ForeignKey("bookings.id"))
     transaction_amount = Column(Float)
     date = Column(Date)
     status = Column(Boolean)

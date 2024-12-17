@@ -70,12 +70,13 @@ class RoomBase(BaseModel):
 class BookingBase(BaseModel):
     user_id: int
     room_id: int
-   #  start_date: datetime.utcnow()
-   #  end_date: datetime
+   #  start_date: datetime.utcnow()    ----> ask is it working
+    start_date: datetime
+    end_date: datetime
     payment_id: int
 
 class PaymentBase(BaseModel):
     booking_id: int
     transaction_amount: float
-   #  date: datetime
+    date: datetime
     status: bool
