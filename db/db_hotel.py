@@ -1,5 +1,6 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm.session import Session
+from auth.oauth2 import get_current_user
 from db.models import DbHotel
 from schemas import HotelBase
 
@@ -29,10 +30,11 @@ def get_all_hotels(db: Session):
 
 def update_hotel(db: Session, id: int, request: HotelBase):
     hotel = db.query(DbHotel).filter(DbHotel.id == id)
+    current_user = get_current_user()
     if not hotel.fisrt():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
             detail=f"Hotel with id {id} not found")
-    if user.id == hotel.manager_id: # How to get id of authorised user
+    if current_user.id == hotel.manager_id: # How to get id of authorised user
         hotel.update({
             DbHotel.name: request.name,
             DbHotel.location: request.location,

@@ -16,7 +16,7 @@ def create_user(db: Session, request: UserBase):
 
     return new_user
 
-def get_all_users(db: Session):
+def get_all_users(db: Session): # TODO: allow this functionality to admin role
     return db.query(DbUser).all()
 
 def get_user(db: Session, id: int):

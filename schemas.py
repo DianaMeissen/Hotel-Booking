@@ -9,6 +9,12 @@ class User(BaseModel):
    class Config():
       orm_mod = True
 
+class ContactInfo(BaseModel):
+   username: str
+   email: str
+   class Config():
+      orm_mod = True
+
 class Hotel(BaseModel):
    id: int
    name: str
@@ -18,9 +24,9 @@ class Hotel(BaseModel):
 
 class Comment(BaseModel):
    user: User
-   rating: int
+   rating: float
    comment: str
-   hotel_name: str
+   hotel_id: int
    class Config(): # needed to convert from db object to object
       orm_mod = True
 
@@ -43,7 +49,7 @@ class UserDisplay(BaseModel):
 class HotelBase(BaseModel):
    name: str
    location: str
-   contact_info: str
+   contact_info: ContactInfo
    amenities: str
    manager_id: int
    rating: Optional[float] 
@@ -52,7 +58,7 @@ class HotelBase(BaseModel):
 class HotelDisplay(BaseModel):
    name: str
    location: str
-   contact_info: str
+   contact_info: ContactInfo
    amenities: str
    manager: User
    rating: Optional[float] 
@@ -80,3 +86,9 @@ class PaymentBase(BaseModel):
     transaction_amount: float
     date: datetime
     status: bool
+
+class CommentsBase(BaseModel):
+   user_id: int
+   hotel_id: int
+   rating: float
+   text: str

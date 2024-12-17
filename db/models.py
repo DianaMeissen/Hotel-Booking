@@ -21,7 +21,7 @@ class DbHotel(Base):
     amenities = Column(String)
     manager_id = Column(Integer, ForeignKey("users.id"))
     manager = relationship("DbUser", back_populates='hotels')
-    rating = Column(Float)  # this field is optional and appears after users leave a review
+    rating = Column(Float, ForeignKey("comments.rating"))  # Is it must be like that bcs rating must be calculated from relative comments from comments table
     comments = Column(String)
 
 class DbRoom(Base):
@@ -49,3 +49,11 @@ class DbPayment(Base):
     transaction_amount = Column(Float)
     date = Column(Date)
     status = Column(Boolean)
+
+class DbComment(Base):
+    __tablename__ = "comments"
+    id = Column(Integer, primary_key = True, index = True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    hotel_id = Column(Integer, ForeignKey("hotels.id"))
+    rating = Column(Float)
+    text = Column(String)
