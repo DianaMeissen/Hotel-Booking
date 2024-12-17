@@ -6,6 +6,7 @@ from schemas import UserBase
 
 def create_user(db: Session, request: UserBase):
     new_user = DbUser(
+        id = request.id,
         username = request.username,
         email = request.email,
         password = Hash.bcrypt(request.password)
@@ -39,6 +40,7 @@ def update_user(db: Session, id: int, request: UserBase):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
             detail=f"User with id {id} not found")
     user.update({
+        DbUser.id: id,
         DbUser.username: request.username,
         DbUser.email: request.email,
         DbUser.password: Hash.bcrypt(request.password) # this must be mooved to 'forget password' functionality

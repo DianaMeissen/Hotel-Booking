@@ -17,14 +17,11 @@ def create_hotel(request: HotelBase, db: Session = Depends(get_db), current_user
 
 @router.get('/{id}')
 def get_hotel(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
-    return {
-        'data': db_hotel.get_hotel(db, id),
-        'current_user': current_user
-    }
+    return db_hotel.get_hotel(db, id)
 
 @router.put('/{id}')
 def update_hotel(request: HotelBase, id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
-    return db_hotel.update_hotel(db, id, request)
+    return db_hotel.update_hotel(db, id, request, current_user)
 
 @router.get('/')
 def get_all_hotels(db: Session = Depends(get_db)):

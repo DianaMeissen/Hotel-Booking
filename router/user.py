@@ -24,7 +24,7 @@ def get_all_users(db: Session = Depends(get_db), current_user: UserBase = Depend
 def get_user(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return db_user.get_user(db, id)
 
-@router.put('/{id}/update') # refactor update part of the request
+@router.put('/{id}') # refactor update part of the request
 def update_user(id: int, request: UserBase, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return db_user.update_user(db, id, request)
 
