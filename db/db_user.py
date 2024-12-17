@@ -61,27 +61,3 @@ def delete_user(db: Session, id: int):
     db.commit()
 
     return "User was deleted succesfully"
-
-def patch_user(db: Session, id: int, request: UserPatch):
-    user = db.query(DbUser).filter(DbUser.id == id)
-    if not user.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-            detail=f"User with id {id} not found")
-    if request.username is not None:
-        user.update({
-            DbUser.username: request.username,
-        })
-    if request.email is not None:
-        user.update({
-            DbUser.email: request.email,
-        })
-    if request.password is not None:
-        user.update({
-            DbUser.password: Hash.bcrypt(request.password)
-        })
-    db.commit()
-
-    return {
-        "message": "User was updated",
-        "user": user
-    }

@@ -31,7 +31,3 @@ def update_user(id: int, request: UserBase, db: Session = Depends(get_db), curre
 @router.delete('/{id}')
 def delete_user(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return db_user.delete_user(db, id)
-
-@router.patch('/{id}')
-def patch_user(id: int, request: UserPatch, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)): # update parts of the object
-    return db_user.patch_user(db, id, request)
