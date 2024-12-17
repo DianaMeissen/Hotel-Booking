@@ -1,14 +1,13 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm.session import Session
 from auth.oauth2 import get_current_user
-from db.models import DbHotel
+from db.models import DbHotel, DbUser
 from schemas import HotelBase
 
-def create_hotel(db: Session, request: HotelBase):
+def create_hotel(db: Session, request: HotelBase):    
     new_hotel = DbHotel(
         name = request.name,
         location = request.location,
-        contact_info = request.contact_info,
         amenities = request.amenities or None,
         manager_id = request.manager_id
     )
@@ -20,6 +19,8 @@ def create_hotel(db: Session, request: HotelBase):
 
 def get_hotel(db: Session, id: int):
     hotel = db.query(DbHotel).filter(DbHotel.id == id).first()
+    # contact_info = db.query(DbUser).filter(DbUser.id == DbHotel.manager_id).first()
+    # hotel.contact_info = contact_info
     if not hotel:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
             detail=f"Hotel with id {id} not found")
@@ -38,7 +39,6 @@ def update_hotel(db: Session, id: int, request: HotelBase):
         hotel.update({
             DbHotel.name: request.name,
             DbHotel.location: request.location,
-            DbHotel.contact_info: request.contact_info,
             DbHotel.amenities: request.amenities or None,
             DbHotel.manager_id: request.manager_id
         })

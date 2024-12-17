@@ -9,38 +9,32 @@ class DbUser(Base):
     username = Column(String)
     email = Column(String)
     password = Column(String)
-    comments = Column(String)
-    hotels = relationship('DbHotel', back_populates='manager')
 
 class DbHotel(Base):
     __tablename__ = "hotels"
     id = Column(Integer, primary_key = True, index = True)
     name = Column(String)
     location = Column(String)
-    contact_info = Column(String)
     amenities = Column(String)
     manager_id = Column(Integer, ForeignKey("users.id"))
-    manager = relationship("DbUser", back_populates='hotels')
-    rating = Column(Float, ForeignKey("comments.rating"))  # Is it must be like that bcs rating must be calculated from relative comments from comments table
-    comments = Column(String)
 
 class DbRoom(Base):
     __tablename__ = "rooms"
     id = Column(Integer, primary_key = True, index = True)
-    hotel_id = Column(Integer) # relationship("DbHotel", back_populates='rooms') this logic must be added to the hotel obj
+    hotel_id = Column(Integer, ForeignKey("hotels.id"))
     room_number = Column(String)
     price = Column(Float)
     type = Column(String)
-    availability_status = Column(Boolean)
 
 class DbBooking(Base):
     __tablename__ = "bookings"
     id = Column(Integer, primary_key = True, index = True)
-    user_id = Column(Integer, ForeignKey("users.id")) # ask maybe it is better to use relationships()
+    user_id = Column(Integer, ForeignKey("users.id"))
     room_id = Column(Integer, ForeignKey("rooms.id"))
     start_date = Column(Date)
     end_date = Column(Date)
-    payment_id = relationship("DbPayment", back_populates='payments')
+    payment_id = Column(Integer, ForeignKey("payments.id"))
+    status = Column(String)
 
 class DbPayment(Base):
     __tablename__ = "payments"

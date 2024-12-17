@@ -3,3 +3,4 @@
 /db/__pycache__
 /router/__pycache__
 .venv
+/fastapi-practice.db

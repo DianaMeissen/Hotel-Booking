@@ -2,10 +2,10 @@ from fastapi import HTTPException, status
 from db.hash import Hash
 from sqlalchemy.orm.session import Session
 from db.models import DbBooking, DbPayment, DbRoom
-from schemas import UserBase
+from schemas import PaymentBase
 from datetime import datetime
 
-def create_payment(db: Session, request: UserBase):
+def create_payment(db: Session, request: PaymentBase):
     booking = db.query(DbBooking).filter(DbBooking.id == request.booking_id).first()
     room_price = db.query(DbRoom).filter(DbRoom.id == booking.room_id).first()
     if not booking:
@@ -17,11 +17,26 @@ def create_payment(db: Session, request: UserBase):
     new_payment = DbPayment(
         booking_id = request.booking_id,
         transaction_amount = request.transaction_amount,
-        date = datetime.utcnow() # Google what method is not deprecated
-        # status = Column(Boolean) #SHould we create in db payment with status rejected, or should we add logic where payment will be pending and the proccesed
+        date = datetime.now(),
+        status = False
     )
     db.add(new_payment)
     db.commit()
     db.refresh(new_payment)
 
     return new_payment
+
+def process_payment(db: Session, id: int, request: PaymentBase):
+    payment = db.query(DbPayment).filter(DbPayment.id == id)
+    if not payment.fisrt():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+            detail=f"Payment with id {id} not found")
+    payment.update({
+        DbPayment.booking_id: request.booking_id,
+        DbPayment.transaction_amount: request.transaction_amount,
+        DbPayment.date: datetime.now(),
+        DbPayment.status: True
+    })
+    db.commit()
+
+    return "Payment was updated"

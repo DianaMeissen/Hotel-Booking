@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from router import user, hotel
 from db import models
 from db.database import engine
-from auth import authentification
+from router import authentification
 
 app = FastAPI()
 app.include_router(authentification.router)

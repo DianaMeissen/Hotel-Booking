@@ -11,7 +11,6 @@ router = APIRouter(
     tags=["hotel"]
 )
 
-# Crearte hotel
 @router.post("/")
 def create_hotel(request: HotelBase, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return db_hotel.create_hotel(db, request)
