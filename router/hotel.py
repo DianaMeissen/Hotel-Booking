@@ -13,7 +13,7 @@ router = APIRouter(
 
 @router.post("/")
 def create_hotel(request: HotelBase, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
-    return db_hotel.create_hotel(db, request)
+    return db_hotel.create_hotel(db, request, current_user)
 
 @router.get('/{id}')
 def get_hotel(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
