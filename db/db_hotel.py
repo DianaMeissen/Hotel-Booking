@@ -34,7 +34,7 @@ def update_hotel(db: Session, id: int, request: HotelBase):
     if not hotel.fisrt():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
             detail=f"Hotel with id {id} not found")
-    if current_user.id == hotel.manager_id: # How to get id of authorised user
+    if current_user.id == hotel.manager_id:
         hotel.update({
             DbHotel.name: request.name,
             DbHotel.location: request.location,
@@ -48,3 +48,13 @@ def update_hotel(db: Session, id: int, request: HotelBase):
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
             detail="Request rejected. Hotel can be updated only by it's manager")
+
+def delete_hotel(db: Session, id: int):
+    hotel = db.query(DbHotel).filter(DbHotel.id == id).first()
+    if not hotel.fisrt():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+            detail=f"Hotel with id {id} not found")
+    db.delete(hotel)
+    db.commit()
+
+    return "Hotel was deleted succesfully"
