@@ -1,26 +1,25 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm.session import Session
-from auth.oauth2 import get_current_user
 from db.models import DbHotel, DbUser
 from schemas import HotelBase, UserBase
 
 def create_hotel(db: Session, request: HotelBase, current_user: UserBase):  
-    if current_user.id == request.manager_id:
-        new_hotel = DbHotel(
-            id = request.id,
-            name = request.name,
-            location = request.location,
-            amenities = request.amenities or None,
-            manager_id = request.manager_id
-        )
-        db.add(new_hotel)
-        db.commit()
-        db.refresh(new_hotel)
-
-        return new_hotel
-    else:
+    if current_user.id != request.manager_id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, 
-            detail=f"You can't create hotel with another manager")
+            detail=f"You can't create hotel with another manager")        
+    
+    new_hotel = DbHotel(
+        id = request.id,
+        name = request.name,
+        location = request.location,
+        amenities = request.amenities or None,
+        manager_id = request.manager_id
+    )
+    db.add(new_hotel)
+    db.commit()
+    db.refresh(new_hotel)
+
+    return new_hotel
 
 def get_hotel(db: Session, id: int):
     hotel = db.query(DbHotel).filter(DbHotel.id == id).first()
