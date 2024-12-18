@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from router import user, hotel
+from router import user, hotel, payment, room
 from db import models
 from db.database import engine
 from auth import authentification
@@ -8,6 +8,8 @@ app = FastAPI()
 app.include_router(authentification.router)
 app.include_router(user.router)
 app.include_router(hotel.router)
+app.include_router(payment.router)
+app.include_router(room.router)
 
 @app.get('/')
 def index():

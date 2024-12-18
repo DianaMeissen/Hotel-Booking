@@ -1,6 +1,7 @@
 from typing import List, Optional
 from pydantic import BaseModel
 from datetime import datetime
+from enum import Enum
 
 # User inside Comment 
 class User(BaseModel):
@@ -71,7 +72,18 @@ class RoomBase(BaseModel):
    room_number: str
    price: float
    type: str
+   availability_status: bool = True
+
+class RoomDisplay(BaseModel):
+   id: int
+   hotel_id: int
+   room_number: str
+   price: float
+   type: str
    availability_status: bool
+
+   class Config:
+      orm_mode = True
 
 class BookingBase(BaseModel):
     user_id: int
@@ -81,11 +93,16 @@ class BookingBase(BaseModel):
     end_date: datetime
     payment_id: int
 
+class PaymentStatus(str, Enum):
+    PENDING = "PENDING"
+    SUCCESS = "SUCCESS"
+    CANCELLED = "CANCELLED"
+
 class PaymentBase(BaseModel):
     booking_id: int
     transaction_amount: float
     date: datetime
-    status: bool
+    status: PaymentStatus = PaymentStatus.PENDING
 
 class CommentsBase(BaseModel):
    user_id: int
