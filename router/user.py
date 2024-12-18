@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from auth.oauth2 import get_current_user
 from db.database import get_db
-from schemas import UserBase, UserDisplay, UserPatch
+from schemas import UserBase, UserDisplay
 
 from db import db_user
 
