@@ -1,7 +1,13 @@
-from sqlalchemy.sql.sqltypes import Integer, String, Float, Boolean, Date
+from sqlalchemy.sql.sqltypes import Integer, String, Float, Boolean, Date, Enum
 from db.database import Base
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
+import enum
+
+class PaymentStatus(enum.Enum):
+    PENDING = "PENDING"
+    SUCCESS = "SUCCESS"
+    CANCELLED = "CANCELLED"
 
 class DbUser(Base):
     __tablename__ = "users"
@@ -42,7 +48,7 @@ class DbPayment(Base):
     booking_id = Column(Integer, ForeignKey("bookings.id"))
     transaction_amount = Column(Float)
     date = Column(Date)
-    status = Column(Boolean)
+    status = Column(Enum(PaymentStatus), default=PaymentStatus.PENDING)
 
 class DbComment(Base):
     __tablename__ = "comments"

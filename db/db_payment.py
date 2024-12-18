@@ -1,5 +1,4 @@
 from fastapi import HTTPException, status
-from db.hash import Hash
 from sqlalchemy.orm.session import Session
 from db.models import DbBooking, DbPayment, DbRoom
 from schemas import PaymentBase
