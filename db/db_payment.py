@@ -7,19 +7,25 @@ from datetime import datetime
 
 def create_payment(db: Session, request: PaymentBase):
     booking = db.query(DbBooking).filter(DbBooking.id == request.booking_id).first()
-    room_price = db.query(DbRoom).filter(DbRoom.id == booking.room_id).first()
+    
     if not booking:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-            detail=f"Booking with id {id} not found")
+            detail=f"Booking with id {request.booking_id} not found")
+    
+    room = db.query(DbRoom).filter(DbRoom.id == booking.room_id).first()
+    room_price = room.price
+
     if room_price < request.transaction_amount:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
             detail=f"Not enough money. Actual room price is {room_price}")
+    
     new_payment = DbPayment(
         booking_id = request.booking_id,
         transaction_amount = request.transaction_amount,
         date = datetime.now(),
         status = False
     )
+
     db.add(new_payment)
     db.commit()
     db.refresh(new_payment)
