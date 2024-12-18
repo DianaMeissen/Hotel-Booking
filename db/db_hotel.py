@@ -57,7 +57,7 @@ def update_hotel(db: Session, id: int, request: HotelBase, current_user: UserBas
 
 def delete_hotel(db: Session, id: int):
     hotel = db.query(DbHotel).filter(DbHotel.id == id).first()
-    if not hotel.fisrt():
+    if not hotel.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
             detail=f"Hotel with id {id} not found")
     db.delete(hotel)

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from router import user, hotel, payment, room, payment
+from router import user, hotel, payment, room, payment, booking
 from db import models
 from db.database import engine
 from router import authentification
