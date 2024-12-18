@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import List
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from db.database import get_db
-from schemas import PaymentBase, UserBase
-from db import db_payment
-from db.models import PaymentStatus
 from auth.oauth2 import get_current_user
+from db.database import get_db
+from schemas import PaymentBase
+
+from db import db_payment
 
 router = APIRouter(
     prefix="/payment",
@@ -12,18 +13,9 @@ router = APIRouter(
 )
 
 @router.post("/")
-def create_payment(
-    request: PaymentBase, 
-    db: Session = Depends(get_db),
-    current_user: UserBase = Depends(get_current_user)
-):
+def create_payment(request:PaymentBase, db: Session = Depends(get_db), current_user: PaymentBase = Depends(get_current_user)):
     return db_payment.create_payment(db, request)
 
-@router.put("/{payment_id}/status/{status}")
-def update_payment_status(
-    payment_id: int,
-    status: PaymentStatus,
-    db: Session = Depends(get_db),
-    current_user: UserBase = Depends(get_current_user)
-):
-    return db_payment.update_payment_status(db, payment_id, status) 
+@router.put('/{id}')
+def process_payment(id: int, db: Session = Depends(get_db), current_user: PaymentBase = Depends(get_current_user)):
+    return db_payment.process_payment(db, id)
