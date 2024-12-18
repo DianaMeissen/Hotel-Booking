@@ -1,7 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
 from datetime import datetime
-from enum import Enum
 
 class UserBase(BaseModel):
    id: int
@@ -32,19 +31,12 @@ class HotelDisplay(BaseModel):
       orm_mod = True
 
 class RoomBase(BaseModel):
+   id: int
    hotel_id: int
    room_number: str
    price: float
    type: str
    availability_status: bool = True
-
-class RoomDisplay(BaseModel):
-   id: int
-   id: int
-   hotel_id: int
-   room_number: str
-   price: float
-   type: str
 
 class BookingBase(BaseModel):
    id: int

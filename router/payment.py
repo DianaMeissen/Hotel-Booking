@@ -16,5 +16,5 @@ def create_payment(request:PaymentBase, db: Session = Depends(get_db), current_u
     return db_payment.create_payment(db, request)
 
 @router.put('/{id}')
-def process_payment(id: int, db: Session = Depends(get_db), current_user: PaymentBase = Depends(get_current_user)):
-    return db_payment.process_payment(db, id)
+def process_payment(id: int, request: PaymentBase, db: Session = Depends(get_db), current_user: PaymentBase = Depends(get_current_user)):
+    return db_payment.process_payment(db, id, request)

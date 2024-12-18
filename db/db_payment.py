@@ -14,7 +14,7 @@ def create_payment(db: Session, request: PaymentBase):
     room = db.query(DbRoom).filter(DbRoom.id == booking.room_id).first()
     room_price = room.price
 
-    if room_price < request.transaction_amount:
+    if room_price > request.transaction_amount:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
             detail=f"Not enough money. Actual room price is {room_price}")
     
@@ -37,11 +37,12 @@ def process_payment(db: Session, id: int, request: PaymentBase):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
             detail=f"Payment with id {id} not found")
     payment.update({
+        DbPayment.id: id,
         DbPayment.booking_id: request.booking_id,
         DbPayment.transaction_amount: request.transaction_amount,
         DbPayment.date: datetime.now(),
-        DbPayment.status: True
+        DbPayment.status: False
     })
     db.commit()
 
-    return "Payment was updated"
+    return {"message": "Payment was updated"}

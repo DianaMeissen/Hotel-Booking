@@ -4,11 +4,6 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 import enum
 
-class PaymentStatus(enum.Enum):
-    PENDING = "PENDING"
-    SUCCESS = "SUCCESS"
-    CANCELLED = "CANCELLED"
-
 class DbUser(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key = True, index = True)
@@ -31,6 +26,7 @@ class DbRoom(Base):
     room_number = Column(String)
     price = Column(Float)
     type = Column(String)
+    availability_status = Column(Boolean)
 
 class DbBooking(Base):
     __tablename__ = "bookings"
@@ -48,7 +44,7 @@ class DbPayment(Base):
     booking_id = Column(Integer, ForeignKey("bookings.id"))
     transaction_amount = Column(Float)
     date = Column(Date)
-    status = Column(Enum(PaymentStatus), default=PaymentStatus.PENDING)
+    status = Column(Boolean)
 
 class DbComment(Base):
     __tablename__ = "comments"

@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from db.database import get_db
-from schemas import RoomBase, RoomDisplay, UserBase
-from db import db_room, db_hotel
+from schemas import RoomBase, UserBase
+from db import db_room
+from db.models import DbHotel, DbRoom
 from auth.oauth2 import get_current_user
 
 router = APIRouter(
@@ -11,29 +12,34 @@ router = APIRouter(
     tags=["room"]
 )
 
-@router.post("/", response_model=RoomDisplay)
+@router.post("/")
 def create_room(
     request: RoomBase, 
     db: Session = Depends(get_db),
     current_user: UserBase = Depends(get_current_user)
 ):
     # Check if current user is the hotel manager
-    hotel = db.query(db_hotel.DbHotel).filter(db_hotel.DbHotel.id == request.hotel_id).first()
-    if not hotel or hotel.manager_id != current_user.id:
+    hotel = db.query(DbHotel).filter(DbHotel.id == request.hotel_id).first()
+    if not hotel:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Hotel with id {request.hotel_id} does not exists"
+        )
+    if hotel.manager_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only hotel manager can add rooms"
         )
     return db_room.create_room(db, request)
 
-@router.get("/{room_id}", response_model=RoomDisplay)
+@router.get("/{room_id}")
 def get_room(
     room_id: int,
     db: Session = Depends(get_db)
 ):
     return db_room.get_room(db, room_id)
 
-@router.get("/hotel/{hotel_id}", response_model=List[RoomDisplay])
+@router.get("/hotel/{hotel_id}")
 def get_hotel_rooms(
     hotel_id: int,
     db: Session = Depends(get_db)
@@ -48,7 +54,7 @@ def update_room(
     current_user: UserBase = Depends(get_current_user)
 ):
     # Check if current user is the hotel manager
-    hotel = db.query(db_hotel.DbHotel).filter(db_hotel.DbHotel.id == request.hotel_id).first()
+    hotel = db.query(DbHotel).filter(DbHotel.id == request.hotel_id).first()
     if not hotel or hotel.manager_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -64,7 +70,7 @@ def delete_room(
 ):
     # Get room and check if current user is the hotel manager
     room = db_room.get_room(db, room_id)
-    hotel = db.query(db_hotel.DbHotel).filter(db_hotel.DbHotel.id == room.hotel_id).first()
+    hotel = db.query(DbHotel).filter(DbHotel.id == room.hotel_id).first()
     if not hotel or hotel.manager_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -81,7 +87,7 @@ def update_room_availability(
 ):
     # Get room and check if current user is the hotel manager
     room = db_room.get_room(db, room_id)
-    hotel = db.query(db_hotel.DbHotel).filter(db_hotel.DbHotel.id == room.hotel_id).first()
+    hotel = db.query(DbHotel).filter(DbHotel.id == room.hotel_id).first()
     if not hotel or hotel.manager_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

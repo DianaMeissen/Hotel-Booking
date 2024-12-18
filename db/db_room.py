@@ -2,7 +2,6 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm.session import Session
 from db.models import DbRoom, DbHotel
 from schemas import RoomBase
-from auth.oauth2 import get_current_user
 
 def create_room(db: Session, request: RoomBase):
     # Check if hotel exists
