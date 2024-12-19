@@ -52,7 +52,7 @@ class PaymentBase(BaseModel):
    booking_id: int
    transaction_amount: float
    date: datetime
-   status: bool
+   status: bool = False
 
 class CommentsBase(BaseModel):
    # id: int

@@ -3,6 +3,7 @@ from sqlalchemy.orm.session import Session
 from db.models import DbBooking, DbPayment, DbRoom
 from schemas import PaymentBase
 from datetime import datetime
+from constants import Booking_status
 
 def create_payment(db: Session, request: PaymentBase):
     booking = db.query(DbBooking).filter(DbBooking.id == request.booking_id).first()
@@ -33,15 +34,26 @@ def create_payment(db: Session, request: PaymentBase):
 
 def process_payment(db: Session, id: int, request: PaymentBase):
     payment = db.query(DbPayment).filter(DbPayment.id == id)
-    if not payment.fisrt():
+
+    if not payment.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
             detail=f"Payment with id {id} not found")
+    
+    booking = db.query(DbBooking).filter(DbBooking.id == request.booking_id)
+    
+    if not booking.first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+            detail=f"Booking with id {request.booking_id} not found")
+    
     payment.update({
-        DbPayment.id: id,
+        # DbPayment.id: id,
         DbPayment.booking_id: request.booking_id,
         DbPayment.transaction_amount: request.transaction_amount,
         DbPayment.date: datetime.now(),
-        DbPayment.status: False
+        DbPayment.status: True
+    })
+    booking.update({
+        DbBooking.status: Booking_status.SUCCESS
     })
     db.commit()
 

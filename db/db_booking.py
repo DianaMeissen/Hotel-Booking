@@ -21,12 +21,12 @@ def create_booking(db: Session, request: BookingBase, current_user: UserBase):
     # check room availability
     
     new_booking = DbBooking(
-        id = request.id,
+        # id = request.id,
         user_id = request.user_id,
         room_id = request.room_id,
         start_date = request.start_date,
         end_date = request.end_date,
-        payment_id = request.payment_id,
+        # payment_id = request.payment_id,
         status = request.status
     )
     db.add(new_booking)

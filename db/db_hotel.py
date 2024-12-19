@@ -9,7 +9,7 @@ def create_hotel(db: Session, request: HotelBase, current_user: UserBase):
             detail=f"You can't create hotel with another manager")        
     
     new_hotel = DbHotel(
-        id = request.id,
+        # id = request.id,
         name = request.name,
         location = request.location,
         amenities = request.amenities or None,
@@ -45,7 +45,7 @@ def update_hotel(db: Session, id: int, request: HotelBase, current_user: UserBas
             detail="Request rejected. Hotel can be updated only by it's manager")
 
     hotel.update({
-        DbHotel.id: request.id,
+        # DbHotel.id: request.id,
         DbHotel.name: request.name,
         DbHotel.location: request.location,
         DbHotel.amenities: request.amenities or None,

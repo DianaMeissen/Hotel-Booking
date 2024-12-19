@@ -34,7 +34,7 @@ class DbBooking(Base):
     room_id = Column(Integer, ForeignKey("rooms.id"))
     start_date = Column(Date)
     end_date = Column(Date)
-    payment_id = relationship(Integer, ForeignKey("payments.id"))
+    # payment_id = relationship(Integer, ForeignKey("payments.id"))
     status = Column(String)
 
 class DbPayment(Base):
