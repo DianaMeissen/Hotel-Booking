@@ -3,27 +3,27 @@ from pydantic import BaseModel
 from datetime import datetime
 
 class UserBase(BaseModel):
-   id: int
+   # id: int
    username: str
    email: str
    password: str
 
 class UserDisplay(BaseModel):
-   id: int
+   # id: int
    username: str
    email: str
    class Config():
       orm_mod = True
 
 class HotelBase(BaseModel):
-   id: int
+   # id: int
    name: str
    location: str
    amenities: str
    manager_id: int
 
 class HotelDisplay(BaseModel):
-   id: int
+   # id: int
    name: str
    location: str
    amenities: str
@@ -31,7 +31,7 @@ class HotelDisplay(BaseModel):
       orm_mod = True
 
 class RoomBase(BaseModel):
-   id: int
+   # id: int
    hotel_id: int
    room_number: str
    price: float
@@ -39,7 +39,7 @@ class RoomBase(BaseModel):
    availability_status: bool = True
 
 class BookingBase(BaseModel):
-   id: int
+   # id: int
    user_id: int
    room_id: int
    start_date: datetime
@@ -48,14 +48,14 @@ class BookingBase(BaseModel):
    status: str
 
 class PaymentBase(BaseModel):
-   id: int
+   # id: int
    booking_id: int
    transaction_amount: float
    date: datetime
    status: bool
 
 class CommentsBase(BaseModel):
-   id: int
+   # id: int
    user_id: int
    hotel_id: int
    rating: float

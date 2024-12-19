@@ -2,7 +2,6 @@ from sqlalchemy.sql.sqltypes import Integer, String, Float, Boolean, Date, Enum
 from db.database import Base
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
-import enum
 
 class DbUser(Base):
     __tablename__ = "users"
@@ -35,7 +34,7 @@ class DbBooking(Base):
     room_id = Column(Integer, ForeignKey("rooms.id"))
     start_date = Column(Date)
     end_date = Column(Date)
-    payment_id = Column(Integer, ForeignKey("payments.id"))
+    payment_id = relationship(Integer, ForeignKey("payments.id"))
     status = Column(String)
 
 class DbPayment(Base):
