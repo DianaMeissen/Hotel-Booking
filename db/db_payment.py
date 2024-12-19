@@ -53,8 +53,8 @@ def process_payment(db: Session, id: int, request: PaymentBase):
         DbPayment.status: True
     })
     booking.update({
-        DbBooking.status: Booking_status.SUCCESS
+        DbBooking.status: Booking_status.SUCCESS.value
     })
     db.commit()
 
-    return {"message": "Payment was updated"}
+    return {"message": "Payment was processed"}

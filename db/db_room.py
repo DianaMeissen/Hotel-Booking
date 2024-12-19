@@ -117,9 +117,3 @@ def update_room_availability(db: Session, room_id: int, availability: bool):
     
     db.commit()
     return f"Room availability updated to {'available' if availability else 'unavailable'}"
-
-# id
-# hotel_id: int
-#    room_number: str
-#    price: float
-#    type: str
