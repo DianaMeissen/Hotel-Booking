@@ -8,8 +8,8 @@ from schemas import UserBase, UserDisplay
 from db import db_user
 
 router = APIRouter(
-    prefix="/user",
-    tags=["user"]
+    prefix="/users",
+    tags=["users"]
 )
 
 @router.post("/", response_model=UserDisplay)
@@ -24,9 +24,10 @@ def get_all_users(db: Session = Depends(get_db), current_user: UserBase = Depend
 def get_user(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return db_user.get_user(db, id)
 
-@router.put('/{id}') # Update all object
+@router.put('/{id}', response_model=UserDisplay) # Update all object
 def update_user(id: int, request: UserBase, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return db_user.update_user(db, id, request)
+    # return "ok"
 
 @router.delete('/{id}')
 def delete_user(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):

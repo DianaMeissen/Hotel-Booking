@@ -7,8 +7,8 @@ from auth.oauth2 import get_current_user, oauth2_scheme
 from db import db_hotel
 
 router = APIRouter(
-    prefix="/hotel",
-    tags=["hotel"]
+    prefix="/hotels",
+    tags=["hotels"]
 )
 
 @router.post("/")

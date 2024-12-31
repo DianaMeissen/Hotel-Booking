@@ -7,8 +7,8 @@ from schemas import PaymentBase
 from db import db_payment
 
 router = APIRouter(
-    prefix="/payment",
-    tags=["payment"]
+    prefix="/payments",
+    tags=["payments"]
 )
 
 @router.post("/")

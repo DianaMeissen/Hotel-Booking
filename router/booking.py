@@ -7,8 +7,8 @@ from schemas import BookingBase
 from db import db_booking
 
 router = APIRouter(
-    prefix="/booking",
-    tags=["booking"]
+    prefix="/bookings",
+    tags=["bookings"]
 )
 
 @router.post("/")

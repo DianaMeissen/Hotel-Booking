@@ -8,8 +8,8 @@ from db.models import DbHotel, DbRoom
 from auth.oauth2 import get_current_user
 
 router = APIRouter(
-    prefix="/room",
-    tags=["room"]
+    prefix="/rooms",
+    tags=["rooms"]
 )
 
 @router.post("/")
