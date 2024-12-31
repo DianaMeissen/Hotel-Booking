@@ -1,7 +1,6 @@
-from sqlalchemy.sql.sqltypes import Integer, String, Float, Boolean, Date, Enum
+from sqlalchemy.sql.sqltypes import Integer, String, Float, Boolean, Date
 from db.database import Base
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.orm import relationship
 
 class DbUser(Base):
     __tablename__ = "users"
