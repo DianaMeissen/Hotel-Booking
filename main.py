@@ -1,8 +1,7 @@
 from fastapi import FastAPI
-from router import user, hotel, payment, room, payment, booking
+from router import user, hotel, payment, room, payment, booking, authentification
 from db import models
 from db.database import engine
-from router import authentification
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()

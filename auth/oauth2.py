@@ -32,7 +32,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
   )
   try:
     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    userId: str = payload.get("sub")
+    userId: int = int(payload.get("sub"))
     if userId is None:
       raise credentials_exception
   except JWTError:

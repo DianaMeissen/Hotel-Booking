@@ -1,4 +1,5 @@
 from fastapi import HTTPException, status
+from auth import oauth2
 from db.hash import Hash
 from sqlalchemy.orm.session import Session
 from db.models import DbUser
@@ -14,7 +15,7 @@ def create_user(db: Session, request: UserBase):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-
+    
     return new_user
 
 def get_all_users(db: Session): # TODO: allow this functionality to admin role
